@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Tutorial9.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,7 +9,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+builder.Services.AddDbContext<TripsContext>(
+    options => options.UseSqlServer("Name=ConnectionStrings:Docker"));
+
 var app = builder.Build();
+app.Configuration.GetConnectionString("Docker");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -16,5 +23,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();
